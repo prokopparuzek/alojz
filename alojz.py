@@ -8,8 +8,6 @@ from time import sleep
 def on():
     system("/home/pi/bin/on")
     sleep(10)
-    if sensor.distance > run:
-        off()
 
 def off():
     system("/home/pi/bin/off")
