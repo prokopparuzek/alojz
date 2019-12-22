@@ -13,6 +13,7 @@ def off():
     system("/home/pi/bin/off")
 
 def Wake(when, plus):
+    '''vzbud mne'''
     s = time.asctime(time.localtime(time.time() + plus)).split(' ')
     s[3] = when
     stop = time.mktime(time.strptime(' '.join(s)))
@@ -21,6 +22,7 @@ def Wake(when, plus):
     signal.pause()
 
 def Run():
+    '''switch dle casu'''
     t = time.asctime(time.localtime(time.time())).split(' ')[3]
     if t >= '22:00:00' or t < '07:00:00':
         off()
