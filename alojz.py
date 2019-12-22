@@ -12,39 +12,31 @@ def on():
 def off():
     system("/home/pi/bin/off")
 
+def Wake(when, plus):
+    s = time.asctime(time.localtime(time.time() + plus)).split(' ')
+    s[3] = when
+    stop = time.mktime(time.strptime(' '.join(s)))
+    delta = stop-time.time()
+    signal.alarm(int(delta))
+    signal.pause()
+
 def Run():
-    while True:
-        t = time.asctime(time.localtime(time.time())).split(' ')[3]
-        if t >= '22:00:00' or t < '07:00:00':
-            off()
-            sensor.when_in_range = None
-            sensor.when_out_of_range = None
-            s = time.asctime(time.localtime(time.time() + 36000)).split(' ')
-            s[3] = '07:00:00'
-            stop = time.mktime(time.strptime(' '.join(s)))
-            delta = stop-time.time()
-            signal.alarm(int(delta))
-            signal.pause()
-        elif t >= '07:00:00' and t <= '09:00:00':
-            on()
-            sensor.when_in_range = None
-            sensor.when_out_of_range = None
-            s = time.asctime(time.localtime(time.time())).split(' ')
-            s[3] = '09:00:00'
-            stop = time.mktime(time.strptime(' '.join(s)))
-            delta = stop-time.time()
-            signal.alarm(int(delta))
-            signal.pause()
-        else:
-            off()
-            sensor.when_in_range = on
-            sensor.when_out_of_range =  off
-            s = time.asctime(time.localtime(time.time())).split(' ')
-            s[3] = '22:00:00'
-            stop = time.mktime(time.strptime(' '.join(s)))
-            delta = stop-time.time()
-            signal.alarm(int(delta))
-            signal.pause()
+    t = time.asctime(time.localtime(time.time())).split(' ')[3]
+    if t >= '22:00:00' or t < '07:00:00':
+        off()
+        sensor.when_in_range = None
+        sensor.when_out_of_range = None
+        Wake('07:00:00', 36000)
+    elif t >= '07:00:00' and t <= '09:00:00':
+        on()
+        sensor.when_in_range = None
+        sensor.when_out_of_range = None
+        Wake('09:00:00', 0)
+    else:
+        off()
+        sensor.when_in_range = on
+        sensor.when_out_of_range =  off
+        Wake('22:00:00', 0)
 
 run = 0.7
 sensor = DistanceSensor(echo=24, trigger=23, max_distance=2, threshold_distance=run, queue_len=5)
