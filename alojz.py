@@ -2,6 +2,7 @@
 from gpiozero import DistanceSensor
 from signal import pause
 from os import system
+import time
 from time import sleep
 
 run = 0.7
@@ -10,15 +11,25 @@ def on():
     system("/home/pi/bin/on")
     sleep(10)
     if sensor.distance > run:
-        system("/home/pi/bin/off")
+        off()
 
 def off():
     system("/home/pi/bin/off")
 
-
 sensor = DistanceSensor(echo=24, trigger=23, max_distance=2, threshold_distance=run, queue_len=5)
 
-sensor.when_in_range = on
-sensor.when_out_of_range =  off
-
-pause()
+while True:
+    t = time.asctime(time.localtime(time.time())).split(' ')[3]
+    if t >= '22:00:00' or t < '07:00:00':
+        off()
+        sensor.when_in_range = None
+        sensor.when_out_of_range = None
+    elif t >= '07:00:00' and t <= '09:00:00':
+        on()
+        sensor.when_in_range = None
+        sensor.when_out_of_range = None
+    else:
+        off()
+        sensor.when_in_range = on
+        sensor.when_out_of_range =  off
+    sleep(1)
