@@ -19,12 +19,22 @@ def Run():
             off()
             sensor.when_in_range = None
             sensor.when_out_of_range = None
-            sleep(1)
+            s = time.asctime(time.localtime(time.time() + 36000)).split(' ')
+            s[3] = '07:00:00'
+            stop = time.mktime(time.strptime(' '.join(s)))
+            delta = stop-time.time()
+            signal.alarm(int(delta))
+            signal.pause()
         elif t >= '07:00:00' and t <= '09:00:00':
             on()
             sensor.when_in_range = None
             sensor.when_out_of_range = None
-            sleep(1)
+            s = time.asctime(time.localtime(time.time())).split(' ')
+            s[3] = '09:00:00'
+            stop = time.mktime(time.strptime(' '.join(s)))
+            delta = stop-time.time()
+            signal.alarm(int(delta))
+            signal.pause()
         else:
             off()
             sensor.when_in_range = on
