@@ -1,7 +1,10 @@
-from gpiozero import DistanceSensor
-from time import sleep
+from gpiozero import DistanceSensor, LED
+from signal import pause
 
-sensor = DistanceSensor(echo=24, trigger=23, max_distance=2)
-while True:
-    print(sensor.distance*100)
-    sleep(1)
+red = LED(14)
+sensor = DistanceSensor(echo=24, trigger=23, max_distance=2, threshold_distance=0.7)
+
+sensor.when_in_range = red.on
+sensor.when_out_of_range = red.off
+
+pause()
