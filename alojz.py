@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 from gpiozero import DistanceSensor
 from signal import pause
 from os import system
