@@ -7,9 +7,11 @@ from time import sleep
 
 def on():
     system("/home/pi/bin/on")
+    print("on")
     sleep(10)
 
 def off():
+    print("off")
     system("/home/pi/bin/off")
 
 def Wake(when, plus):
@@ -25,16 +27,19 @@ def Run():
     '''switch dle casu'''
     t = time.asctime(time.localtime(time.time())).split(' ')[3]
     if t >= '22:00:00' or t < '07:00:00':
+        print("noc")
         off()
         sensor.when_in_range = None
         sensor.when_out_of_range = None
         Wake('07:00:00', 36000)
     elif t >= '07:00:00' and t <= '09:00:00':
+        print("ráno")
         on()
         sensor.when_in_range = None
         sensor.when_out_of_range = None
         Wake('09:00:00', 0)
     else:
+        print("den")
         off()
         sensor.when_in_range = on
         sensor.when_out_of_range =  off
