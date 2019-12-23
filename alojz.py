@@ -21,7 +21,7 @@ def Wake(when, plus):
     signal.alarm(int(delta))
     signal.pause()
 
-def Run():
+def Run(signum, frame): #handler musí příjmat 2 argumenty (číslo signálu a frame (odkudse volá))
     '''switch dle casu'''
     t = time.asctime(time.localtime(time.time())).split(' ')[3]
     if t >= '22:00:00' or t < '07:00:00':
@@ -43,4 +43,4 @@ def Run():
 run = 0.7
 sensor = DistanceSensor(echo=24, trigger=23, max_distance=2, threshold_distance=run, queue_len=5)
 signal.signal(signal.SIGALRM, Run)
-Run()
+Run(14, None)
