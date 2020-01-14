@@ -15,8 +15,6 @@ def off():
 
 def Run(signum, frame): #handler musí příjmat 2 argumenty (číslo signálu a frame (odkudse volá))
     '''switch dle casu'''
-    with open("/tmp/alojz.pid", "w", encoding="UTF-8") as f:
-        f.write(str(os.getpid()))
     t = time.asctime(time.localtime(time.time())).split(' ')[3]
     if t >= '22:00:00' or t < '07:00:00':
         off()
@@ -32,6 +30,8 @@ def Run(signum, frame): #handler musí příjmat 2 argumenty (číslo signálu a
         sensor.when_out_of_range =  off
     signal.pause()
 
+with open("/tmp/alojz.pid", "w", encoding="UTF-8") as f:
+    f.write(str(os.getpid()))
 run = 0.7
 sensor = DistanceSensor(echo=24, trigger=23, max_distance=2, threshold_distance=run, queue_len=5)
 signal.signal(signal.SIGALRM, Run)
