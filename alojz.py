@@ -15,7 +15,7 @@ def off():
 
 def Run(signum, frame): #handler musí příjmat 2 argumenty (číslo signálu a frame (odkud se volá))
     '''switch dle casu'''
-    t = time.asctime(time.localtime(time.time())).split(' ')[3]
+    t = time.asctime(time.localtime(time.time())).split(' ')[4]
     if t >= '22:00:00' or t < '07:00:00':
         off()
         sensor.when_in_range = None
