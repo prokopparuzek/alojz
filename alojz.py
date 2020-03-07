@@ -17,7 +17,7 @@ def Run(signum, frame): #handler musí příjmat 2 argumenty (číslo signálu a
     '''switch dle casu'''
     t = time.asctime(time.localtime(time.time())).split(' ')
     try: # někdy je mezera navíc, 1.-9.
-        t = t.remove('')
+        t.remove('')
     except ValueError:
         pass
     t = t[3]
@@ -37,7 +37,7 @@ def Run(signum, frame): #handler musí příjmat 2 argumenty (číslo signálu a
 
 with open("/tmp/alojz.pid", "w", encoding="UTF-8") as f:
     f.write(str(os.getpid()))
-run = 0.6
+run = 0.5
 sensor = DistanceSensor(echo=24, trigger=23, max_distance=2, threshold_distance=run, queue_len=5)
 signal.signal(signal.SIGALRM, Run)
 Run(14, None)
